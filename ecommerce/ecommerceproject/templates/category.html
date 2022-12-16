@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{%block metadescription %}
+  {% if category %}
+     {{category.description | truncatewords:155}}
+  {% else %}
+      Welcome to ALL IN ONE Store
+  {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+     {{category.name}}-ALL IN ONE Store
+  {% else %}
+      See our new collections _ALL IN ONE Store
+  {% endif %}
+{% endblock %}
+{% block content %}
+   {%if category %}
+      <div>
+          <div class="row my_row_class">
+              <div class="mx-auto">
+                   <p><a href="{% url 'ecommerceapp:allproductcategory' %}">Our Products Collections</a></p>
+              </div>
+          </div>
+      </div>
+   {% endif %}
+<div class="mx-auto">
+    {%if category %}
+       <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+    <br>
+<div>
+    <h1 class="text-center my-title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+{%else%}
+<div>
+<img class="my_image my_image_padding" src="{% static 'image/banner.png' %}" alt="our produucts" width="1230px" height="300px" >
+</div>
+<div>
+    <h1 class="text-center my-title">Our products collection</h1>
+    <p class="text-justify">Duis ad sit elit est cupidatat veniam ad. Ut esse deserunt adipisicing non in cillum commodo sunt. Quis excepteur nulla ipsum aute amet reprehenderit. Exercitation occaecat est in excepteur adipisicing cillum esse esse laboris. Aliqua exercitation exercitation excepteur irure laborum.</p>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx-auto">
+        {% for pro in products.object_list %}
+          <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4"  >
+              <div class="card text-center"  style="min-width:18rem">
+                  <a href="{{ pro.get_url }}" >
+                      {% if pro.image %}
+                        <img class="card-img-top my_image" src="{{pro.image.url}}" alt="{{pro.name}}">
+                      {% endif %}
+                  </a>
+
+                 <div class="card-body">
+                     <h4 class="card-title">{{pro.name}}</h4>
+                     <p class="card-text">{{pro.price}}</p>
+                 </div>
+              </div>
+          </div>
+        {%endfor%}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+               <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
